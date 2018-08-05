@@ -48,7 +48,7 @@ class Board:
             state = self.board[index]
             if state is None:
                 board_state += '0'
-            elif self == 'X':
+            elif state == 'X':
                 board_state += '1'
             else:
                 board_state += '2'
