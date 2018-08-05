@@ -17,13 +17,13 @@ class Player:
         self.games_tied += 1
 
     def stats(self):
-        print "player: {0} won: {1} lost: {2} tied: {3}\n".format(self.name, self.games_won, self.games_lost, self.games_tied)
+        return "player: {0} won: {1} lost: {2} tied: {3}\n".format(self.name, self.games_won, self.games_lost, self.games_tied)
 
     def reset(self):
         self.moves = []
 
-	def next_move(self, board):
+    def next_move(self, board, open_positions):
         return -1
 
-    def learn(self):
+    def learn(self, reward):
         return

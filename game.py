@@ -1,35 +1,73 @@
 from board import Board
-from player import Player
+from random_player import RandomPlayer
+
+import random
 
 
 class Game:
 
+    TOTAL_GAMES = 1000
+    REWARD_WIN = 100
+    REWARD_LOSS = -100
+    REWARD_NONE = 0
+
     def __init__(self):
-        self.x = Player('x')
-        self.o = Player('o')
-        self.states = []
-        self.moves = []
-        self.games_played = 0
-        self.games_total = 1000
+        return
 
     def play(self):
 
-        board = Board()
+        playerX = RandomPlayer('x')
+        playerO = RandomPlayer('o')
 
-        while self.games_played < self.games_total:
-            self.x.reset()
-            self.o.reset()
+        games_played = 0
+        games_tied = 0
+
+        board = Board()
+        players = [playerX, playerO]
+
+        while games_played < Game.TOTAL_GAMES:
+
+            playerX.reset()
+            playerO.reset()
             board.reset()
 
-            current_player = self.x
+            current_player = random.choice( players )
 
-            while not board.has_winner():
+            while True:
+                player = players[ current_player ]
+                open_moves = board.empty_positions()
 
-                if current_player == self.x:
-                    current_player = self.o
-                else:
-                    current_player = self.x
+                if not open_moves:
+                    games_tied += 1
+                    playerO.tied_game()
+                    playerO.learn( Game.REWARD_NONE )
 
-            self.games_played += 1
+                    playerX.tied_game()
+                    playerX.learn( Game.REWARD_NONE )
+                    break
 
+                next_move = player.next_move( board )
+                board.move( player, next_move )
+                winner = board.has_winner()
 
+                if winner:
+                    player.won_game()
+                    player.learn( Game.REWARD_WIN )
+
+                    losing_player = players[ self.other_player(current_player) ]
+                    losing_player.lost_game()
+                    losing_player.learn( Game.REWARD_LOSS )
+
+                    break
+
+                current_player = self.other_player( current_player )
+
+            games_played += 1
+
+        print "Done.\n"
+
+        print playerX.stats()
+        print playerO.stats()
+
+    def other_player(self, current_player):
+        return (current_player + 1) % 2
