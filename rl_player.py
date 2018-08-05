@@ -18,7 +18,7 @@ class RLPlayer(Player):
         state = board.state()
 
         if state in self.memory:
-            
+
         else:
             memory[ state ] = []
 

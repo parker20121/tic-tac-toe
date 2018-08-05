@@ -56,8 +56,14 @@ class Board:
         return board_state
 
     def show(self):
+
+        board = []
+
+        for item in self.board:
+            board.append( item ) if item else board.append(' ')
+
         return " {0} | {1} | {2} \n" \
                "===|===|===\n" \
                " {3} | {4} | {5} \n" \
                "===|===|===\n" \
-               " {6} | {7} | {8} \n".format(*self.board)
+               " {6} | {7} | {8} \n".format(*board)
